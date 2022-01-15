@@ -13,13 +13,23 @@ def scrape_all():
 
     news_title, news_paragraph = mars_news(browser)
 
+    title_a, title_b, title_c, title_d, img_url_a, img_url_b, img_url_c, img_url_d = hem_imgs(browser)
+
     # Run all scraping functions and store results in a dictionary
     data = {
         "news_title": news_title,
         "news_paragraph": news_paragraph,
         "featured_image": featured_image(browser),
         "facts": mars_facts(),
-        "last_modified": dt.datetime.now()
+        "last_modified": dt.datetime.now(),
+        'title_a': title_a,
+        'title_b': title_b,
+        'title_c': title_c,
+        'title_d': title_d,
+        'img_url_a': img_url_a,
+        'img_url_b': img_url_b,
+        'img_url_c': img_url_c,
+        'img_url_d': img_url_d
     }
 
     # Stop webdriver and return data
@@ -96,6 +106,57 @@ def mars_facts():
 
     # Convert dataframe into HTML format, add bootstrap
     return df.to_html(classes="table table-striped")
+
+def hem_imgs(browser):
+    # 1. Use browser to visit the URL 
+    url = 'https://marshemispheres.com/'
+    browser.visit(url)
+
+# 2. Create a list to hold the images and titles.
+    html = browser.html
+    mars_soup = soup(html, 'html.parser')
+    title_list = []
+    img_url_list = []
+    pre_file_list = []
+
+
+# 3. Write code to retrieve the image urls and titles for each hemisphere.
+
+    descriptions = mars_soup.find_all('div', class_='description')
+
+    for description in descriptions:
+
+        img_list = {}
+        init_url = description.find('a')['href']
+        jpeg_url = "https://marshemispheres.com/" + init_url
+        browser.visit(jpeg_url)
+        html = browser.html
+        img_soup = soup(html, 'html.parser')
+        source_file = img_soup.find('div', class_='downloads')
+        next_file = source_file.find_all('li')[0]
+        pre_file = next_file.find('a')['href']
+        pre_file_list.append(pre_file)
+        img_url = "https://marshemispheres.com/" + pre_file
+        title = img_soup.find('h2', class_='title').text
+        img_url_list.append(img_url)
+        title_list.append(title)
+
+    title_a = title_list[0]
+    title_b = title_list[1]
+    title_c = title_list[2]
+    title_d = title_list[3]
+
+    img_url_a = 'https://marshemispheres.com/images2/full.jpg'
+    # img_url_a = f'https://marshemispheres.com/{pre_file_list[0]}'
+    img_url_b = "https://marshemispheres.com/" + pre_file_list[1]
+    img_url_c = "https://marshemispheres.com/" + pre_file_list[2]
+    img_url_d = "https://marshemispheres.com/" + pre_file_list[3]
+
+    print(img_url_a)
+    print(img_url_b)
+    
+    return title_a, title_b, title_c, title_d, img_url_a, img_url_b, img_url_c, img_url_d
+
 
 if __name__ == "__main__":
 
