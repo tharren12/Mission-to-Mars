@@ -49,17 +49,46 @@
         </div>
       </div>
       <!-- Section for Featured Image and Facts table -->
+      
       <div class="row" id="mars-hem-imgs">
-        <style>
-          h5 {text-align: center;}
-        </style>
-        <div class="col-md-4">
-          <h5>Mars Hemispheres</h5>
-          <img
-            src="{{ mars.img_url_a }}"
-            class="img-responsive"
-            alt="Responsive image"
-          />
+        <div class="container">
+
+          <h3><center>Mars Hemispheres</center></h3>
+          <!-- <div class="row">
+            <div class="column"> 
+              {% for hemisphere in mars.img_urls %}
+              <img
+                    src="{{hemisphere.img_url }}"
+                    alt="centered image"
+                    width="400"
+                    height="400"
+                    class="marginauto"
+                  />
+                  <h3>  {{ hemisphere.title }}</h3>
+          
+              {% endfor %}
+            </div>
+          </div> -->
+          
+          <table class="centerTable" style="border:1px solid black"></table>
+           
+            
+              {% for hemisphere in mars.img_urls %}
+                <tr>
+                  <td><img
+                    src="{{hemisphere.img_url }}"
+                    alt="centered image"
+                    width="400"
+                    height="400"
+                    class="marginauto"
+                  />
+                  <h4>  {{ hemisphere.title }}</h4>
+
+              {% endfor %}
+            
+          </table>
+  
+ 
         </div>
       </div>
     </div>
